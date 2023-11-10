@@ -109,7 +109,7 @@ if __name__ == "__main__":
 
     set_seed(args.seed)
     
-    tokenizer = RobertaTokenizer.from_pretrained("roberta-base")
+    tokenizer = RobertaTokenizer.from_pretrained("/scratch/user/kangda/MAVEN-ERE/roberta-base")
     print("loading data...")
     if not args.eval_only:
         train_dataloader = get_dataloader(tokenizer, "train", data_dir="../data/MAVEN_ERE", max_length=256, shuffle=True, batch_size=args.batch_size, sample_rate=args.sample_rate)

@@ -2,6 +2,6 @@ torch
 tqdm
 transformers
 numpy
-sklearn
+scikit-learn
 scipy
 nltk

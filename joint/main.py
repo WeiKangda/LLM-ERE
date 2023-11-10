@@ -215,7 +215,7 @@ if __name__ == "__main__":
     CAUSAL_REPORT_CLASS_LABELS = list(range(1, len(ID2CAUSALREL)))
     SUBEVENT_REPORT_CLASS_LABELS = list(range(1, len(ID2SUBEVENTREL)))
 
-    output_dir = Path(f"./output/{args.seed}/MAVEN-ERE")
+    output_dir = Path(f"./output/baseline/{args.seed}/MAVEN-ERE")
     output_dir.mkdir(exist_ok=True, parents=True)
         
     sys.stdout = open(os.path.join(output_dir, "log.txt"), 'w')
@@ -223,7 +223,7 @@ if __name__ == "__main__":
 
     set_seed(args.seed)
     
-    tokenizer = RobertaTokenizer.from_pretrained("/data/MODELS/roberta-base")
+    tokenizer = RobertaTokenizer.from_pretrained("/scratch/user/kangda/MAVEN-ERE/roberta-base")
     print("loading data...")
     if not args.eval_only:
         train_dataloader = get_dataloader(tokenizer, "train", max_length=256, shuffle=True, batch_size=args.batch_size, ignore_nonetype=args.ignore_nonetype, sample_rate=args.sample_rate)
@@ -379,7 +379,25 @@ if __name__ == "__main__":
                         if better[k]:
                             print("better %s!"%(k))
                             state = {"model":model.state_dict(), "optimizer":optimizer.state_dict(), "scheduler": scheduler.state_dict()}
+                            #print(model.state_dict())
+                            #print(model.state_dict().keys())
+                            #exit()
                             torch.save(state, os.path.join(output_dir, "best_%s"%(k)))
+
+                            state = {"model":model.encoder.model.state_dict(), "optimizer":optimizer.state_dict(), "scheduler": scheduler.state_dict()}
+                            torch.save(state, os.path.join(output_dir, "best_%s_roberta"%(k)))
+                            if k == "COREFERENCE":
+                                state = {"model":model.coref_scorer.score.state_dict(), "optimizer":optimizer.state_dict(), "scheduler": scheduler.state_dict()}
+                                torch.save(state, os.path.join(output_dir, "best_%s_linear"%(k)))
+                            if k == "TEMPORAL":
+                                state = {"model":model.temporal_scorer.score.state_dict(), "optimizer":optimizer.state_dict(), "scheduler": scheduler.state_dict()}
+                                torch.save(state, os.path.join(output_dir, "best_%s_linear"%(k)))
+                            if k == "CAUSAL":
+                                state = {"model":model.causal_scorer.score.state_dict(), "optimizer":optimizer.state_dict(), "scheduler": scheduler.state_dict()}
+                                torch.save(state, os.path.join(output_dir, "best_%s_linear"%(k)))
+                            if k == "SUBEVENT":
+                                state = {"model":model.subevent_scorer.score.state_dict(), "optimizer":optimizer.state_dict(), "scheduler": scheduler.state_dict()}
+                                torch.save(state, os.path.join(output_dir, "best_%s_linear"%(k)))
 
     dump_results={}
     print("*" * 30 + "Test"+ "*" * 30)

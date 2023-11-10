@@ -6,7 +6,7 @@ import torch.nn.functional as F
 from .data import TEMPREL2ID, SUBEVENTREL2ID, CAUSALREL2ID, COREFREL2ID
 
 class EventEncoder(nn.Module):
-    def __init__(self, vocab_size, model_name="/data/MODELS/roberta-base", aggr="mean"):
+    def __init__(self, vocab_size, model_name="/scratch/user/kangda/MAVEN-ERE/roberta-base", aggr="mean"):
         nn.Module.__init__(self)
         config = AutoConfig.from_pretrained(model_name)
         if isinstance(config, BertConfig):
@@ -115,7 +115,7 @@ class CorefPairScorer(nn.Module):
         return all_probs
 
 class Model(nn.Module):
-    def __init__(self, vocab_size, model_name="/data/MODELS/roberta-base", embed_dim=768, aggr="mean"):
+    def __init__(self, vocab_size, model_name="/scratch/user/kangda/MAVEN-ERE/roberta-base", embed_dim=768, aggr="mean"):
         nn.Module.__init__(self)
         self.encoder = EventEncoder(vocab_size, model_name=model_name, aggr=aggr)
         self.temporal_scorer = PairScorer(embed_dim=embed_dim, out_dim=len(TEMPREL2ID))

@@ -5,7 +5,7 @@ from .utils import to_cuda, pad_and_stack
 import torch.nn.functional as F
 
 class EventEncoder(nn.Module):
-    def __init__(self, vocab_size, model_name="roberta-base", aggr="mean"):
+    def __init__(self, vocab_size, model_name="/scratch/user/kangda/MAVEN-ERE/roberta-base", aggr="mean"):
         nn.Module.__init__(self)
         config = AutoConfig.from_pretrained(model_name)
         if isinstance(config, BertConfig):
@@ -84,7 +84,7 @@ class PairScorer(nn.Module):
         return all_scores
 
 class Model(nn.Module):
-    def __init__(self, vocab_size, out_dim=7, model_name="roberta-base", embed_dim=768, aggr="mean"):
+    def __init__(self, vocab_size, out_dim=7, model_name="/scratch/user/kangda/MAVEN-ERE/roberta-base", embed_dim=768, aggr="mean"):
         nn.Module.__init__(self)
         self.encoder = EventEncoder(vocab_size, model_name=model_name, aggr=aggr)
         self.scorer = PairScorer(embed_dim=embed_dim, out_dim=out_dim)

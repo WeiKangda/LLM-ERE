@@ -1,5 +1,13 @@
 import torch
 import torch.nn.functional as F
+import math
+from math import floor, sqrt
+import random
+
+def uniform(size, tensor):
+    bound = 1.0 / math.sqrt(size)
+    if tensor is not None:
+        tensor.data.uniform_(-bound, bound)
 
 def to_var(x):
     """ Convert a tensor to a backprop tensor and put on GPU """
@@ -33,7 +41,6 @@ def pad_and_stack(tensors, pad_size=None, value=0):
                           for sent, size in zip(tensors, sizes)], dim=0)
 
     return padded, sizes
-
-
+        
 if __name__ == "__main__":
     pass

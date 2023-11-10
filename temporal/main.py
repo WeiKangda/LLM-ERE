@@ -102,14 +102,14 @@ if __name__ == "__main__":
     REPORT_CLASS_NAMES = [ID2REL[i] for i in range(0,len(ID2REL) - 1)]
     REPORT_CLASS_LABELS = list(range(len(ID2REL) - 1))
 
-    output_dir = Path(f"./output/{args.seed}/maven_ignore_none_{args.ignore_nonetype}_{args.sample_rate}")
+    output_dir = Path(f"./output/baseline/{args.seed}/maven_ignore_none_{args.ignore_nonetype}_{args.sample_rate}")
     output_dir.mkdir(exist_ok=True, parents=True)
         
     sys.stdout = open(os.path.join(output_dir, "log.txt"), 'w')
 
     set_seed(args.seed)
     
-    tokenizer = RobertaTokenizer.from_pretrained("roberta-base")
+    tokenizer = RobertaTokenizer.from_pretrained("/scratch/user/kangda/MAVEN-ERE/roberta-base")
 
     print("loading data...")
     if not args.eval_only:
@@ -184,15 +184,22 @@ if __name__ == "__main__":
                         current_score = res["micro avg"]["f1-score"]
                     if current_score > best_score:
                         print("best result!")
+                        #print(model.state_dict())
                         best_score = current_score
                         state = {"model":model.state_dict(), "optimizer":optimizer.state_dict(), "scheduler": scheduler.state_dict()}
                         torch.save(state, os.path.join(output_dir, "best"))
+                        state = {"model":model.encoder.model.module.state_dict(), "optimizer":optimizer.state_dict(), "scheduler": scheduler.state_dict()}
+                        torch.save(state, os.path.join(output_dir, "best_roberta"))
+                        state = {"model":model.scorer.score.state_dict(), "optimizer":optimizer.state_dict(), "scheduler": scheduler.state_dict()}
+                        torch.save(state, os.path.join(output_dir, "linear"))
+                        #exit()
 
     
     print("*" * 30 + "Predict"+ "*" * 30)
     if os.path.exists(os.path.join(output_dir, "best")):
         print("loading from", os.path.join(output_dir, "best"))
         state = torch.load(os.path.join(output_dir, "best"))
+        #sprint(state["model"])
         model.load_state_dict(state["model"])
     all_preds = predict(model, test_dataloader)
     dump_result("../data/MAVEN_ERE/test.jsonl", all_preds, output_dir, ignore_nonetype=args.ignore_nonetype)

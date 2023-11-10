@@ -30,7 +30,7 @@ TEMPREL2ID = {
     "SIMULTANEOUS": 3,
     "ENDS-ON": 4,
     "BEGINS-ON": 5,
-    "NONE": 6,
+    "NONE": 6
 }
 
 BIDIRECTIONAL_REL = ["SIMULTANEOUS", "BEGINS-ON"]

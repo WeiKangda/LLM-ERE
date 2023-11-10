@@ -73,6 +73,23 @@ class Document:
                         pair2rel[(e1, e2)] = REL2ID[rel]
                         if rel in ["SIMULTANEOUS", "BEGINS-ON"]:
                             pair2rel[(e2, e1)] = REL2ID[rel]
+
+        #self.prompts = []
+        #for rel in self.relations:
+        #    for pair in self.relations[rel]:
+        #        for e1 in self.eid2words[pair[0]]:
+        #            for e2 in self.eid2words[pair[1]]:
+        #                prompt = f"What is the temporal relation between {e1} and {e2}?"
+        #                for sentence in self.sentences:
+        #                    prompt = prompt + " " + sentence
+        #                self.prompts.append(prompt)
+        #                if rel in ["SIMULTANEOUS", "BEGINS-ON"]:
+        #                    prompt = f"What is the temporal relation between {e2} and {e1}?"
+        #                    for sentence in self.sentences:
+        #                        prompt = prompt + " " + sentence
+        #                    self.prompts.append(prompt)
+        #assert len(self.prompts) == len(self.events) ** 2 - len(self.events)
+
         self.labels = []
         for e1 in self.events:
             for e2 in self.events:
@@ -85,6 +102,8 @@ class Document:
                         self.labels.append(pair2rel.get((e1["id"], e2["id"]), REL2ID["NONE"]))
                 else:
                     self.labels.append(pair2rel.get((e1["id"], e2["id"]), REL2ID["NONE"]))
+        #print(f"self.labels {len(self.labels)}")
+        #print(f"self.events {len(self.events)}")
         assert len(self.labels) == len(self.events) ** 2 - len(self.events)
 
 
