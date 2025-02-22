@@ -106,7 +106,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
 
-    output_dir = Path(f"./output/{args.seed}/{args.dataset}_{args.sample_rate}")
+    output_dir = Path(f"./output/{args.seed}/{args.sample_rate}")
     output_dir.mkdir(exist_ok=True, parents=True)
     sys.stdout = open(os.path.join(output_dir, "log.txt"), 'w')
     print(vars(args))
@@ -119,7 +119,7 @@ if __name__ == "__main__":
     else:
         raise NotImplementedError
     set_seed(args.seed)
-    tokenizer = RobertaTokenizer.from_pretrained("/scratch/user/kangda/MAVEN-ERE/roberta-base")
+    tokenizer = RobertaTokenizer.from_pretrained("roberta-base")
 
     print("loading data...")
     if not args.eval_only:

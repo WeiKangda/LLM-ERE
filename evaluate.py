@@ -137,7 +137,7 @@ def lea(clusters, mention_to_gold):
     num, dem = 0, 0
 
     for c in clusters:
-        if len(c) == 1:
+        if len(c) == 1: 
             continue
         common_links = 0
         all_links = len(c) * (len(c) - 1) / 2.0
@@ -156,6 +156,10 @@ def blanc(mention_to_cluster, mention_to_gold):
     wc = 0
     rn = 0
     wn = 0
+    #print(len(mention_to_cluster))
+    #print(mention_to_cluster)
+    #print(len(mention_to_gold))
+    #print(mention_to_gold)
     assert len(mention_to_cluster) == len(mention_to_gold)
     mentions = list(mention_to_cluster.keys())
     for i in range(len(mentions)):
@@ -217,8 +221,9 @@ def evaluate_coreference(golden, res):
             for mention in event['mention']:
                 eid[mention['id']]=len(eid)
                 clu.append(eid[mention['id']])
-            gold_clusters.append(clu)
+            gold_clusters.append(clu) 
         pred_clusters=[]
+        
         if id in res and 'coreference' in res[id]:
             pred_doc=res[id]
             for cluster in pred_doc['coreference']:
@@ -227,11 +232,34 @@ def evaluate_coreference(golden, res):
                     if mention in eid:
                         clu.append(eid[mention])
                         eid[mention]=-1
+                #print(cluster)
                 if len(clu):
+                    #print(len(clu))
+                    #print(clu)
                     pred_clusters.append(tuple(clu))
+        #print(eid)
+        #print(len(eid))
+        pred_num = 0
+        for cluster in pred_clusters:
+            for event in cluster:
+                pred_num += 1
+        #print(pred_num)
+
         for m in eid:
             if eid[m]!=-1:
+                #print("cnm")
                 pred_clusters.append([eid[m]])
+
+        gold_num = 0
+        for cluster in gold_clusters:
+            for event in cluster:
+                gold_num += 1
+        pred_num = 0
+        for cluster in pred_clusters:
+            for event in cluster:
+                pred_num += 1
+        #print(gold_num)
+        #print(pred_num)
         gold_event2cluster = inv(gold_clusters)
         pred_event2cluster = inv(pred_clusters)
         eval_result = EvalResult(gold_clusters, gold_event2cluster, pred_clusters, pred_event2cluster)
@@ -302,11 +330,12 @@ def evaluate(golden, res, type):
 
 
 if __name__ == "__main__":
-    input_dir = argv[1]
-    output_dir = argv[2]
-    submit_dir = os.path.join(input_dir, 'res')
-    truth_dir = os.path.join(input_dir, 'ref')
+    submit_dir = argv[1]
+    truth_dir = argv[2]
+    #submit_dir = os.path.join(input_dir)
+    #truth_dir = os.path.join(input_dir,)
     # Create the output directory, if it does not already exist and open output files
+    output_dir = submit_dir
     if not os.path.exists(output_dir):
         os.mkdir(output_dir)
     score_file = open(os.path.join(output_dir, 'scores.txt'), 'w')
@@ -314,7 +343,7 @@ if __name__ == "__main__":
 
     # read ground truth
     grouth_truth={}
-    with open(os.path.join(truth_dir,"test.jsonl"),"r") as fin:
+    with open(os.path.join(truth_dir,"valid_first5.jsonl"),"r") as fin:
         lines=fin.readlines()
         for line in lines:
             doc=json.loads(line.strip())
@@ -322,7 +351,7 @@ if __name__ == "__main__":
 
     # read prediction
     prediction={}
-    with open(os.path.join(submit_dir,"test_prediction.jsonl"),"r") as fin:
+    with open(os.path.join(submit_dir,"processed_valid_prediction.jsonl"),"r") as fin:
         lines=fin.readlines()
         for line in lines:
             doc=json.loads(line.strip())

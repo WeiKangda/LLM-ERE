@@ -103,7 +103,7 @@ if __name__ == "__main__":
     label_num = len(ID2REL)
     REPORT_CLASS_NAMES = [ID2REL[i] for i in range(0,len(ID2REL) - 1)]
     REPORT_CLASS_LABELS = list(range(len(ID2REL) - 1))
-    output_dir = Path(f"./output/{args.seed}/maven_{args.sample_rate}")
+    output_dir = Path(f"./output/{args.seed}/{args.sample_rate}")
     output_dir.mkdir(exist_ok=True, parents=True)
     sys.stdout = open(os.path.join(output_dir, "log.txt"), 'w')
 

@@ -108,14 +108,14 @@ if __name__ == "__main__":
     REPORT_CLASS_NAMES = [ID2REL[i] for i in range(0,len(ID2REL) - 1)]
     REPORT_CLASS_LABELS = list(range(len(ID2REL) - 1))
 
-    output_dir = Path(f"./output/{args.seed}/maven_ignore_none_{args.ignore_nonetype}_{args.sample_rate}")
+    output_dir = Path(f"./output/{args.seed}/{args.sample_rate}")
     output_dir.mkdir(exist_ok=True, parents=True)
         
     sys.stdout = open(os.path.join(output_dir, "log.txt"), 'w')
 
     set_seed(args.seed)
     
-    tokenizer = RobertaTokenizer.from_pretrained("/scratch/user/kangda/MAVEN-ERE/roberta-base")
+    tokenizer = RobertaTokenizer.from_pretrained("roberta-base")
 
     print("loading data...")
     if not args.eval_only:

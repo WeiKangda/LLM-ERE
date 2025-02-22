@@ -1,4 +1,4 @@
-from src.model import Model
+from src.model import *
 from src.utils import to_cuda, to_var
 import torch
 import random
@@ -87,6 +87,7 @@ def evaluate(model, dataloader, desc=""):
     for metric, name in zip(metrics, metric_names):
         res = evaluate_documents(coref_train_eval_results, metric)
         result_collection["COREFERENCE"][name] = {"precision": res[0], "recall": res[1], "f1": res[2]}
+    print("COREFERENCE:", result_collection["COREFERENCE"])
     temporal_res = classification_report(temporal_label_list, temporal_pred_list, output_dict=True, target_names=TEMP_REPORT_CLASS_NAMES, labels=TEMP_REPORT_CLASS_LABELS)
     print("TEMPORAL:", temporal_res)
     result_collection["TEMPORAL"] = temporal_res
@@ -215,7 +216,7 @@ if __name__ == "__main__":
     CAUSAL_REPORT_CLASS_LABELS = list(range(1, len(ID2CAUSALREL)))
     SUBEVENT_REPORT_CLASS_LABELS = list(range(1, len(ID2SUBEVENTREL)))
 
-    output_dir = Path(f"./output/baseline/{args.seed}/MAVEN-ERE")
+    output_dir = Path(f"./output/baseline/{int(float(args.sample_rate)*2913)}/{args.seed}")
     output_dir.mkdir(exist_ok=True, parents=True)
         
     sys.stdout = open(os.path.join(output_dir, "log.txt"), 'w')
@@ -227,7 +228,7 @@ if __name__ == "__main__":
     print("loading data...")
     if not args.eval_only:
         train_dataloader = get_dataloader(tokenizer, "train", max_length=256, shuffle=True, batch_size=args.batch_size, ignore_nonetype=args.ignore_nonetype, sample_rate=args.sample_rate)
-        dev_dataloader = get_dataloader(tokenizer, "valid", max_length=256, shuffle=False, batch_size=args.batch_size, ignore_nonetype=args.ignore_nonetype)
+        dev_dataloader = get_dataloader(tokenizer, "valid_first10", max_length=256, shuffle=False, batch_size=args.batch_size, ignore_nonetype=args.ignore_nonetype)
     test_dataloader = get_dataloader(tokenizer, "test", max_length=256, shuffle=False, batch_size=args.batch_size, ignore_nonetype=args.ignore_nonetype)
 
     print("loading model...")
@@ -249,7 +250,12 @@ if __name__ == "__main__":
 
     metrics = [b_cubed, ceafe, muc, blanc]
     metric_names = ["B-cubed", "CEAF", "MUC", "BLANC"]
-    Loss = nn.CrossEntropyLoss(ignore_index=-100)
+    # Loss = nn.CrossEntropyLoss(ignore_index=-100)
+    Loss_temporal = focal_loss(num_classes=len(TEMPREL2ID))
+    Loss_causal = focal_loss(num_classes=len(CAUSALREL2ID))
+    Loss_subevent = focal_loss(num_classes=len(SUBEVENTREL2ID))
+    Loss_coreference = focal_loss(num_classes=len(COREFREL2ID))
+
     glb_step = 0
     if not args.eval_only:
         print("*******************start training********************")
@@ -299,7 +305,7 @@ if __name__ == "__main__":
                 scores = temporal_scores
                 scores = scores.view(-1, scores.size(-1))
                 labels = labels.view(-1)
-                tmp = Loss(scores, labels)
+                tmp = Loss_temporal(scores, labels)
                 loss += args.temporal_rate * tmp
                 temp_losses.append(tmp.item())
                 pred = torch.argmax(scores, dim=-1)
@@ -310,7 +316,7 @@ if __name__ == "__main__":
                 scores = causal_scores
                 scores = scores.view(-1, scores.size(-1))
                 labels = labels.view(-1)
-                tmp = Loss(scores, labels)
+                tmp = Loss_causal(scores, labels)
                 loss += args.causal_rate * tmp
                 causal_losses.append(tmp.item())
                 pred = torch.argmax(scores, dim=-1)
@@ -321,7 +327,7 @@ if __name__ == "__main__":
                 scores = subevent_scores
                 scores = scores.view(-1, scores.size(-1))
                 labels = labels.view(-1)
-                tmp = Loss(scores, labels)
+                tmp = Loss_subevent(scores, labels)
                 loss += args.subevent_rate * tmp
                 subevent_losses.append(tmp.item())
                 pred = torch.argmax(scores, dim=-1)
@@ -398,7 +404,9 @@ if __name__ == "__main__":
                             if k == "SUBEVENT":
                                 state = {"model":model.subevent_scorer.score.state_dict(), "optimizer":optimizer.state_dict(), "scheduler": scheduler.state_dict()}
                                 torch.save(state, os.path.join(output_dir, "best_%s_linear"%(k)))
-
+        print("Results on the first 10 validation set.")
+        print(evaluate(model, dev_dataloader, desc="Validation"))
+    exit()
     dump_results={}
     print("*" * 30 + "Test"+ "*" * 30)
     for k in ["COREFERENCE", "TEMPORAL", "CAUSAL", "SUBEVENT"]:
