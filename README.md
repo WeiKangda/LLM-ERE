@@ -8,7 +8,7 @@ This repository contains the code and datasets used in the paper:
 > *Authors: Kangda Wei, Aayush Gautam, Ruihong Huang*\
 > *Published in: Findings of the Association for Computational Linguistics: EMNLP 2024*
 
-We systematically evaluate the performance of Large Language Models (LLMs) in extracting event relations using the MAVEN-ERE dataset. The study examines various prompting techniques and assesses LLMs like GPT-3.5 and LLaMA-2 against a supervised baseline.
+We systematically evaluate the performance of Large Language Models (LLMs) in extracting event relations using the MAVEN-ERE dataset. The study examines various prompting techniques and assesses LLMs like GPT-3.5 and Llama-2 against a supervised baseline.
 
 ## Introduction
 
@@ -43,7 +43,7 @@ We implement four prompting strategies:
 Models Evaluated:
 
 - **GPT-3.5-turbo-16k** (OpenAI API)
-- **LLaMA-2-7b-chat-hf** (Hugging Face)
+- **Llama-2-7b-chat-hf** (Hugging Face)
 
 ## Installation
 
@@ -57,17 +57,7 @@ pip install -r requirements.txt
 
 ## Usage
 
-Run event relation extraction using LLaMA-2:
-
-```bash
-python extract_relations.py --model llama-2 --dataset MAVEN-ERE
-```
-
-Evaluate results against the gold-standard dataset:
-
-```bash
-python evaluate.py --predictions results.json --gold data/maven-ere.json
-```
+To-dos
 
 ## Citation
 
@@ -96,7 +86,7 @@ If you use this work, please cite:
 
 ## Acknowledgments
 
-We gratefully acknowledge support from National Science Foun- dation via the award IIS-1942918. Portions of this research were conducted with the advanced com- puting resources provided by Texas A&M High- Performance Research Computing. The LLaMA-2 model was accessed via Hugging Face, and GPT-3.5 was evaluated using OpenAI’s API.
+We gratefully acknowledge support from National Science Foun- dation via the award IIS-1942918. Portions of this research were conducted with the advanced com- puting resources provided by Texas A&M High- Performance Research Computing. The Llama-2 model was accessed via Hugging Face, and GPT-3.5 was evaluated using OpenAI’s API.
 
 ---
 
