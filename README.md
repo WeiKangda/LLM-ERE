@@ -4,9 +4,9 @@
 
 This repository contains the code and datasets used in the paper:
 
-> **"Evaluating Large Language Models for Event Relation Extraction"**\
-> *Authors: [Author Names]*\
-> *Published in: [Conference/Journal Name, Year]*
+> **"Are LLMs Good Annotators for Discourse-level Event Relation Extraction?"**\
+> *Authors: Kangda Wei, Aayush Gautam, Ruihong Huang*\
+> *Published in: Findings of the Association for Computational Linguistics: EMNLP 2024*
 
 We systematically evaluate the performance of Large Language Models (LLMs) in extracting event relations using the MAVEN-ERE dataset. The study examines various prompting techniques and assesses LLMs like GPT-3.5 and LLaMA-2 against a supervised baseline.
 
@@ -31,8 +31,6 @@ We use the **MAVEN-ERE** dataset from Wang et al. (2022), which contains:
 - **57,992** causal relations
 - **15,841** subevent relations
 
-The dataset is publicly available at [Dataset Link].
-
 ## Methods
 
 We implement four prompting strategies:
@@ -52,8 +50,8 @@ Models Evaluated:
 Clone the repository and install dependencies:
 
 ```bash
-git clone https://github.com/your-repo/maven-ere.git
-cd maven-ere
+git clone https://github.com/WeiKangda/LLM-ERE.git
+cd LLM-ERE
 pip install -r requirements.txt
 ```
 
