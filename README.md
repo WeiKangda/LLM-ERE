@@ -1,4 +1,4 @@
-# MAVEN-ERE: Evaluating Large Language Models for Event Relation Extraction
+# Are LLMs Good Annotators for Discourse-level Event Relation Extraction?
 
 ## Overview
 
