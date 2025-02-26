@@ -37,7 +37,7 @@ We implement four prompting strategies:
 
 1. **Bulk Prediction** - Querying for all relations at once.
 2. **Iterative Prediction** - Querying sentence by sentence, augmenting predictions.
-3. **Event Ranking** - Ranking events by querying for missing relation tuples.
+3. **Event Ranking** - Ranking event by event.
 4. **Pairwise Prediction** - Querying all event-TIMEX pairs for relation classification.
 
 Models Evaluated:
