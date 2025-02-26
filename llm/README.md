@@ -6,8 +6,8 @@ python gpt_bulk_prediction.py
 ```
 To run other prompt types, change the Python file name to the corresponding prompt.
 
-### Running LLaMA-2
-To use bulk prediction with LLaMA-2, run:
+### Running Llama-2
+To use bulk prediction with Llama-2, run:
 ```bash
 torchrun --nproc_per_node 1 llama2_bulk_prediction.py \  
     --ckpt_dir ../../llama/llama-2-7b-chat/ \  
@@ -16,8 +16,8 @@ torchrun --nproc_per_node 1 llama2_bulk_prediction.py \
 ```
 To run other prompt types, change the Python file name to the corresponding prompt.
 
-### Fine-tuning LLaMA-2
-To fine-tune LLaMA-2, run:
+### Fine-tuning Llama-2
+To fine-tune Llama-2, run:
 ```bash
 python -u llama2_fine_tuning.py --relation joint --epoch 3 --train_doc_number 5 --without_downsample
 ```
