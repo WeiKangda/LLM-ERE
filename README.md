@@ -8,7 +8,7 @@ This repository contains the code and datasets used in the paper:
 > *Authors: Kangda Wei, Aayush Gautam, Ruihong Huang*\
 > *Published in: Findings of the Association for Computational Linguistics: EMNLP 2024*
 
-We systematically evaluate the performance of Large Language Models (LLMs) in extracting event relations using the MAVEN-ERE dataset. The study examines various prompting techniques and assesses LLMs like GPT-3.5 and Llama-2 against a supervised baseline.
+We systematically evaluate the performance of Large Language Models (LLMs) in extracting event relations using the MAVEN-ERE dataset. The study examines various prompting techniques and assesses LLMs like GPT-3.5 and Llama-2 against a supervised baseline presented in [MAVEN-ERE](https://aclanthology.org/2022.emnlp-main.60/) by Wang et al. 2022.
 
 ## Introduction
 
