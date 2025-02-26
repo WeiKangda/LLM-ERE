@@ -59,7 +59,7 @@ pip install -r requirements.txt
 
 To run the supervised baseline, follow the README file in the corresponding directory. The code is the same as [MAVEN-ERE](https://aclanthology.org/2022.emnlp-main.60/)
 
-To run LLMs evluation, follow the README file in the ```bash ./llm``` directory.
+To run LLMs evluation, follow the README file in the ```./llm``` directory.
 
 ## Citation
 
